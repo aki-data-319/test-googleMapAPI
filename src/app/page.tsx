@@ -1,31 +1,13 @@
 "use client";
 
-
-// app/page.tsx または src/app/page.tsx
-
-// TypeScript にグローバル変数 'google' が存在することを宣言
-declare const google: any;
-
-import React, { useEffect } from "react";
 import Script from "next/script";
+import React from "react";
+import MapView from "../components/MapView";
 
 export default function Page() {
-  useEffect(() => {
-    async function initMap() {
-      // Dynamic Library Import で maps ライブラリを読み込み
-      const { Map } = await google.maps.importLibrary("maps");
-      // 指定した要素に地図を初期化
-      new Map(document.getElementById("map"), {
-        center: { lat: -34.397, lng: 150.644 },
-        zoom: 8,
-      });
-    }
-    initMap();
-  }, []);
-
   return (
     <main>
-      {/* ブートストラップローダのスクリプト */}
+      {/* Google Maps Dynamic Library Import ブートストラップ */}
       <Script id="google-maps-bootstrap" strategy="beforeInteractive">
         {`
           (g => {
@@ -46,7 +28,8 @@ export default function Page() {
                   a.nonce = m.querySelector("script[nonce]")?.nonce || "";
                   m.head.append(a);
                 }));
-            d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n));
+            d[l] ? console.warn(p + " only loads once. Ignoring:", g)
+                  : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n));
           })({
             key: "${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}",
             v: "weekly"
@@ -54,10 +37,8 @@ export default function Page() {
         `}
       </Script>
 
-      <h1>Google Map Test (Dynamic Library Import)</h1>
-      {/* マップを描画する要素 */}
-      <div id="map" style={{ width: "600px", height: "400px", border: "1px solid #ccc" }} />
+      <h1>Google Map Test</h1>
+      <MapView />
     </main>
   );
 }
-
